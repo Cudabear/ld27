@@ -4,21 +4,48 @@
     
     <!--StarChaser stylesheets -->
     <style type="text/css">
-        body { padding: 0; margin: 0; background-color: gray;}
+        body { padding: 0; margin: 0; background-color: black;}
 
-        #footer{ height: 45px; position: fixed; bottom: 0; width: 100%; background: transparent; padding:5px 0 0 5px; }
+        #footer{line-height: 35px; color: white; height: 35px; /*position: fixed; bottom: 0;*/ width: 100%; background: transparent; padding:0px 5px; box-sizing: border-box;}
+        #footer #text { float:left;}
+        #footer #powered_text {float: right; padding-right: 10px;}
+        #footer #img {height: 35px; float: right;}
+        #footer #img img { height: 35px;}
     </style>
 
 	<!-- Favicon -->
 	<!-- <link rel="shortcut icon" href="http://www.cudascubby.com/favicon.ico"> -->
-</head>
-    <!-- StarChaser javascripts library files -->
-    <script type="text/javascript" src ="lib/phaser/phaser.js"></script>
-    <div id="footer"> Created by Cudabear, 2013.  Do not Redistribute without Permission. </div>
 
-    <!-- ld27 javascripts files -->
+        <!-- ld27 javascripts files -->
 
     <!-- Include this file last! -->
+
+    <!-- StarChaser javascripts library files -->
+    <script type="text/javascript" src ="lib/phaser/phaser.js"></script>
+</head>
+<body>
+    
+    <div id="game">
+
+    </div>
+
+    <div id="footer"> 
+        <div id="text">
+            <span>Created by Cudabear, 2013.  Do not Redistribute without Permission. </span>
+        </div>
+        
+        <div id="img">  
+            <span><a href="https://github.com/photonstorm/phaser"><img src="../starchaser/lib/phaser/phaser-logo-small.png" href="https://github.com/photonstorm/phaser"></a></span>
+        </div>
+
+        <div id="powered_text">
+            <span> Powered by </span>
+        </div>
+    </div>
+
+
+
+
     <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
