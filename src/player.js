@@ -1,4 +1,4 @@
-Player = function(gameInstance, key, lantern, x, y){
+Player = function(gameInstance, key, x, y){
 	//initialization
 	this.sprite = gameInstance.add.sprite(x, y, 'guy');
 	this.sprite.anchor.setTo(.5, .5);
@@ -117,9 +117,9 @@ Player = function(gameInstance, key, lantern, x, y){
 		}
 
 		if(this.isCarrying){
-			this.carriedItem.sprite.x = this.sprite.x + this.sprite.scale.x * (this.carriedItem === this.lantern ? 40 : 50);
-			this.carriedItem.sprite.y = this.sprite.y - (this.carriedItem === this.lantern ? -20 : 0);
-			this.carriedItem.sprite.scale.x = this.sprite.scale.x * (this.carriedItem === this.lantern ? 2 : 1);
+			this.carriedItem.sprite.x = this.sprite.x + this.sprite.scale.x * (this.carriedItem.isLantern ? 40 : 50);
+			this.carriedItem.sprite.y = this.sprite.y - (this.carriedItem.isLantern ? -20 : 0);
+			this.carriedItem.sprite.scale.x = this.sprite.scale.x * (this.carriedItem.isLantern ? 2 : 1);
 			this.carriedItem.sprite.body.velocity.y = 0;
 		}
 
@@ -147,9 +147,9 @@ Player = function(gameInstance, key, lantern, x, y){
 
 	this.dropItem = function(){
 		if(this.sprite.scale.x < 0){
-			this.carriedItem.sprite.x += (this.carriedItem === this.lantern ? 48 : 50);
+			this.carriedItem.sprite.x += (this.carriedItem.isLantern ? 48 : 50);
 		}else{
-			this.carriedItem.sprite.x -= (this.carriedItem === this.lantern ? 40 : 50);
+			this.carriedItem.sprite.x -= (this.carriedItem.isLantern ? 40 : 50);
 		}	
 
 		this.isCarrying = false;
@@ -162,14 +162,17 @@ Player = function(gameInstance, key, lantern, x, y){
 	}
 
 	this.bringOutLantern = function(){
-		var distX = Math.abs(this.lantern.sprite.x - this.sprite.x);
-		var distY = Math.abs(this.lantern.sprite.y - this.sprite.y);
-		var dist = Math.sqrt(distX*distX + distY*distY);
+		for(var i = 0; i < lanterns.length; i++){
+			var distX = Math.abs(lanterns[i].sprite.x - this.sprite.x);
+			var distY = Math.abs(lanterns[i].sprite.y - this.sprite.y);
+			var dist = Math.sqrt(distX*distX + distY*distY);
 
-		if(dist < 75){
-			this.isCarrying = true;
-			pickupfx.play();
-			this.carriedItem = this.lantern;
+			if(dist < 75){
+				this.isCarrying = true;
+				pickupfx.play();
+				this.carriedItem = lanterns[i];
+				break;
+			}
 		}
 	}
 

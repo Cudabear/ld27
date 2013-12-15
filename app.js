@@ -3,13 +3,13 @@ var HEIGHT = 720;
 
 var player;
 var key;
-var lantern;
+var lanterns = [];
 var level;
 var inputHandler;
 var background;
 var gremlins = [];
 var currentLevel = 0;
-var glow;
+var glows;
 
 var jumpfx;
 var stepfx;
@@ -76,6 +76,8 @@ function create(){
 	background = game.add.sprite(0, 0, 'background');
 	background.fixedToCamera = true;
 
+	glows = game.add.group();
+
 	jumpfx = game.add.audio('jump');
 	stepfx = game.add.audio('step');
 	drainfx = game.add.audio('drain');
@@ -107,16 +109,22 @@ function update(){
 		game.physics.collide(player.key.sprite, level.layer, keyCollisionHandler, null, this);
 	}
 
-	if(player.carriedItem !== player.lantern){	
-		game.physics.collide(player.lantern.sprite, level.layer);
+	for(var z = 0; z < lanterns.length; z++){	
+		lanterns[z].update();
+		if(player.carriedItem !== lanterns[z]){
+			game.physics.collide(lanterns[z].sprite, level.layer);
+		}
 	}
 
 	for(var g = 0; g < gremlins.length; g++){
 		game.physics.collide(gremlins[g].sprite, level.layer, gremlins[g].handleEdge, null, gremlins[g]);
 		game.physics.collide(key.sprite, gremlins[g].sprite, gameoverCollisionHandler, null, this);
 
-		if(Phaser.Rectangle.intersects(gremlins[g].sprite.body, lantern.lightBubble.body)){
-			collisionHandler(gremlins[g].sprite, lantern.lightBubble);
+		for(var z = 0; z < lanterns.length; z++){
+
+			if(Phaser.Rectangle.intersects(gremlins[g].sprite.body, lanterns[z].lightBubble.body)){
+				collisionHandler(gremlins[g].sprite, lanterns[z].lightBubble);
+			}
 		}
 
 		gremlins[g].update();
@@ -146,8 +154,8 @@ function update(){
 	}
 
 	//help the lantern do stuff
-	player.lantern.lightBubble.x = player.lantern.sprite.x - 128*1.5;
-	player.lantern.lightBubble.y = player.lantern.sprite.y - 128*1.5 + 16;
+	//player.lantern.lightBubble.x = player.lantern.sprite.x - 128*1.5;
+	//player.lantern.lightBubble.y = player.lantern.sprite.y - 128*1.5 + 16;
 
 	inputHandler.handleInput();
 }
@@ -174,9 +182,8 @@ function getLevelDat(levelDat){
 	player = levelDat [1];
 	key = levelDat [2];
 	level = levelDat[0];
-	lantern = levelDat[3];
+	lanterns = levelDat[3];
 	gremlins = levelDat[4];
-	glow = levelDat[5];
 }
 
 function keyCollisionHandler(entity, tile){
@@ -202,12 +209,12 @@ function repeatLevel(){
 			gremlins[i].sprite.kill();
 		}
 		key.sprite.kill();
-		lantern.sprite.kill();
 		
-	}
-
-	if(glow){
-		glow.kill();
+		for(var i = 0; i < lanterns.length; i++){
+			lanterns[i].lightBubble.kill();
+			lanterns[i].sprite.kill();
+		}
+		
 	}
 
 	if(level && level.layer){
@@ -216,8 +223,7 @@ function repeatLevel(){
 
 	player = null;
 	key = null;
-	glow = null;
-	lantern = null;
+	lanterns = [];
 	gremlins = [];
 	level = null;
 
