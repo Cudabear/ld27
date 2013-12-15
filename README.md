@@ -1,4 +1,6 @@
-ld27
+ld28
 ====
 
-Game for Ludum Dare 27 created using HMTL5 Canvas, Javascript, and Phaser.
+Game for Ludum Dare 28 created using HMTL5 Canvas, Javascript, and Phaser.
+
+were you fooled by the repo title?  Yeah, my bad.
