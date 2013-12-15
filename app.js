@@ -16,6 +16,7 @@ var stepfx;
 var drainfx;
 var restartfx;
 var gameoverfx;
+var pickupfx;
 
 
 var text;
@@ -63,9 +64,13 @@ function preload(){
 	game.load.audio('drain', 'res/sfx/drain.wav');
 	game.load.audio('gameover', 'res/sfx/gameover.wav');
 	game.load.audio('restart', 'res/sfx/restart.wav');
+	game.load.audio('pickup', 'res/sfx/pickup.wav');
 }
 
 function create(){
+	tileSetInit();
+	LevelFactory.init();
+
 	game.world.setBounds(-2500, -2500, 5000, 5000);
 	game.stage.backgroundColor = '#333333';
 	background = game.add.sprite(0, 0, 'background');
@@ -76,12 +81,10 @@ function create(){
 	drainfx = game.add.audio('drain');
 	restartfx = game.add.audio('restart');
 	gameoverfx = game.add.audio('gameover');
+	pickupfx = game.add.audio('pickup');
 
 
 	inputHandler = new InputHandler(game, player);
-
-	text = game.add.text(1800, 600, '', { font: '64px Iceland', align: 'center', fill: '#FFFFFF'});
-	text.alpha = 0;
 
 	repeatLevel();
 }
@@ -186,37 +189,10 @@ function keyCollisionHandler(entity, tile){
 
 function gameoverCollisionHandler(key, entity){
 	if(states.current !== states.gameOver){
+		key.kill();
+		player.sprite.body.velocity.x = 0;
 		gameOver();
 	}
-}
-
-function nextLevel(){
-	if(states.current === states.playing){
-		player.sprite.kill();
-		for(var i = 0; i < gremlins.length; i++){
-			gremlins[i].sprite.kill();
-		}
-		key.sprite.kill();
-		glow.kill();
-		lantern.sprite.kill();
-		level.layer.kill();
-	}
-
-	player = null;
-	key = null;
-	glow = null;
-	lantern = null;
-	gremlins = [];
-	level = null;
-
-	if(glow){
-		glow.kill();
-	}
-
-	currentLevel++;
-	getLevelDat(LevelFactory.createLevel(game, currentLevel));
-	inputHandler.handler = player;
-	states.current = states.playing;
 }
 
 function repeatLevel(){
@@ -227,38 +203,38 @@ function repeatLevel(){
 		}
 		key.sprite.kill();
 		lantern.sprite.kill();
-		level.layer.kill();
-
-		// player = null;
-		// key = null;
-		// glow = null;
-		// lantern = null;
-		// gremlins = [];
-		// level = null;
-
+		
 	}
 
-	//game.load.tilemap('level'+currentLevel, 'res/levels/level'+currentLevel+'.json', null, Phaser.Tilemap.TILED_JSON);
 	if(glow){
 		glow.kill();
 	}
 
+	if(level && level.layer){
+		level.layer.kill();
+	}
+
 	player = null;
-		key = null;
-		glow = null;
-		lantern = null;
-		gremlins = [];
-		level = null;
+	key = null;
+	glow = null;
+	lantern = null;
+	gremlins = [];
+	level = null;
 
 	//currentLevel++;
 	getLevelDat(LevelFactory.createLevel(game, currentLevel));
 	inputHandler.handler = player;
 	states.current = states.playing;
+	if(text){
+		text.destroy();
+	}
+	text = game.add.text(1800, 600, '', { font: '64px Iceland', align: 'center', fill: '#FFFFFF'});
+	text.alpha = 0;
 }
 
 function gameOver(){
 	gameoverfx.play();
 	states.current = states.gameOver;
-	displayText('sorry, bub! (press z to retry)', player.sprite.x, player.sprite.y+ 150);
+	displayText('sorry, bub! (press r to retry)', game.camera.x + 50, game.camera.y + 50);
 
 }

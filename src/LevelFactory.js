@@ -5,22 +5,22 @@ var lanternTile = 25;
 
 var LevelFactory = {
 
-	createSampleLevel: function(game){
-		var lightBubble = game.add.sprite(300, 1000, 'light');
-		lightBubble.scale = {x: 1.5, y:1.5};
-		var level = new Level(game, 'sample', 'tiles', 3200, 640);
-		var gremlins = [];
+	
 
-		
-		var dat = this.parseTiles(game, level, 3200, 640, lightBubble, gremlins);
-		dat.push(lightBubble);
-		return dat;
+	init: function(){
+		this.maps = [game.add.tilemap('level0'),
+			game.add.tilemap('level1'),
+			game.add.tilemap('level2'),
+			game.add.tilemap('level3'),
+			game.add.tilemap('level4'),
+			game.add.tilemap('level5')
+			];
 	},
 
 	createLevel: function(game, number){
 		var lightBubble = game.add.sprite(0, 0, 'light');
 		lightBubble.scale = {x: 1.5, y:1.5};
-		var level = new Level(game, 'level'+number, 'tiles', 3200, 640);
+		var level = new Level(game, this.maps[number], 3200, 640);
 		var gremlins = [];
 
 		

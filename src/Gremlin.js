@@ -73,7 +73,7 @@ Gremlin = function(gameInstance, key, x, y){
 		var distY = Math.abs(this.sprite.y - this.key.sprite.y);
 		var dist = Math.sqrt(distX*distX + distY*distY);
 
-		if(dist < 250){
+		if(dist < 350){
 			return true;
 		}
 

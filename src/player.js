@@ -45,68 +45,75 @@ Player = function(gameInstance, key, lantern, x, y){
 	}
 
 	this.handleInput = function(type){
-		switch(type){
-			case 'left':
-				this.sprite.body.velocity.x = -this.speed;
-				this.sprite.scale.x = -1;
-				this.doWalk();
-				break;
-			case 'right':
-					this.sprite.body.velocity.x = this.speed;
-					this.sprite.scale.x = 1;
+		if(states.current === states.playing){
+			switch(type){
+				case 'left':
+					this.sprite.body.velocity.x = -this.speed;
+					this.sprite.scale.x = -1;
 					this.doWalk();
-				break;
-			case 'jump':
-				if(this.canJump && this.jumpHeldFor < 4){
-					this.sprite.body.velocity.y -= 250;
-					this.jumpHeldFor++;
+					break;
+				case 'right':
+						this.sprite.body.velocity.x = this.speed;
+						this.sprite.scale.x = 1;
+						this.doWalk();
+					break;
+				case 'jump':
+					if(this.canJump){
+						this.sprite.body.velocity.y -= 500;
+						this.canJump = false
 
-					if(!jumpfx.isPlaying){
-						jumpfx.play();
+						if(!jumpfx.isPlaying){
+							jumpfx.play();
+						}
 					}
-				}else{
-					this.canJump = false;
-					this.jumpHeldFor = 0;
-
-					
-				}
-				break;
-			case 'pickup':
-				//prevent button spam
-				if(states.current === states.playing){
-					if(this.pickupButtonCooldown === 0){
-						this.pickupButtonCooldown = 8;
-						if(!this.isCarrying){
-							//attempt to pickup key
-							
-							if(!this.pickupKey()){
-								this.bringOutLantern();
+					break;
+				case 'pickup':
+					//prevent button spam
+					if(states.current === states.playing){
+						if(this.pickupButtonCooldown <= 0){
+							this.pickupButtonCooldown = 8;
+							if(!this.isCarrying){
+								//attempt to pickup key
+								
+								if(!this.pickupKey()){
+									this.bringOutLantern();
+								}
+							}else{
+								this.dropItem();
 							}
 						}else{
-							this.dropItem();
+							this.pickupButtonCooldown--;
 						}
-					}else{
-						this.pickupButtonCooldown--;
 					}
-				}else if(states.current === states.gameOver){
-					repeatLevel();
-					restartfx.play();
-					states.current = states.playing;
-					text.alpha = 0;
-				}
-				break;
-			case 'up':
-				var tileType = level.map.getTileWorldXY(this.sprite.x, this.sprite.y, 64, 64, 0);
+					break;
+				case 'up':
+					var tileType = level.map.getTileWorldXY(this.sprite.x, this.sprite.y, 64, 64, 0);
 
-				if(tileType ===14 || tileType === 13 || tileType === 18 || tileType === 19 || tileType === 15|| tileType === 20){
-					if(this.carriedItem === this.key){	
-						nextLevel();
+					if(tileType ===14 || tileType === 13 || tileType === 18 || tileType === 19 || tileType === 15|| tileType === 20){
+						if(this.carriedItem === this.key){	
+							currentLevel++;
+							repeatLevel();
+						}
 					}
-				}
-			case 'none':
-				this.doStand();
-				this.sprite.body.velocity.x = 0;
-				break;
+				case 'none':
+					this.doStand();
+					this.sprite.body.velocity.x = 0;
+					break;
+				case 'restart':
+						states.current = states.gameOver;
+						repeatLevel();
+						restartfx.play();
+						states.current = states.playing;
+						text.alpha = 0;
+					break;
+			}
+		}else if(states.current === states.gameOver){
+			if(type === 'restart'){
+				repeatLevel();
+				restartfx.play();
+				states.current = states.playing;
+				text.alpha = 0;
+			}
 		}
 
 		if(this.isCarrying){
@@ -131,6 +138,7 @@ Player = function(gameInstance, key, lantern, x, y){
 			this.isCarrying = true;
 			//this.key.sprite.body.gravity = 0;
 			this.carriedItem = this.key;
+			pickupfx.play();
 			return true;
 		}
 
@@ -160,6 +168,7 @@ Player = function(gameInstance, key, lantern, x, y){
 
 		if(dist < 75){
 			this.isCarrying = true;
+			pickupfx.play();
 			this.carriedItem = this.lantern;
 		}
 	}
