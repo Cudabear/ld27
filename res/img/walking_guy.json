@@ -1,0 +1,47 @@
+{"frames":[
+
+{
+	"filename": "walk00",
+	"frame": {"x": 0, "y": 0, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+},{
+	"filename": "walk01",
+	"frame": {"x": 64, "y": 0, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+},{
+	"filename": "walk02",
+	"frame": {"x": 128, "y": 0, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+},{
+	"filename": "walk03",
+	"frame": {"x": 0, "y": 128, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+},{
+	"filename": "walk04",
+	"frame": {"x": 64, "y": 128, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+},{
+	"filename": "walk05",
+	"frame": {"x": 128, "y": 128, "w":64, "h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x": 0, "y": 0, "w": 64, "h": 128},
+	"sourceSize": {"w":64,"h":128}
+}
+
+]}

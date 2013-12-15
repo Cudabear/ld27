@@ -1,27 +1,38 @@
 <html>
 <head>
-    <title>ld27</title>
+    <title>ld28</title>
     
     <!--StarChaser stylesheets -->
     <style type="text/css">
-        body { padding: 0; margin: 0; background-color: black;}
+        body { padding: 0; margin: 0; background-color: gray; font-family: 'Iceland';}
 
-        #footer{line-height: 35px; color: white; height: 35px; /*position: fixed; bottom: 0;*/ width: 100%; background: transparent; padding:0px 5px; box-sizing: border-box;}
+        #footer{line-height: 35px; color: white; height: 35px; width: 100%; background: transparent; padding:0px 5px; box-sizing: border-box;}
         #footer #text { float:left;}
         #footer #powered_text {float: right; padding-right: 10px;}
         #footer #img {height: 35px; float: right;}
         #footer #img img { height: 35px;}
+        #game { margin-left: auto; margin-right: auto; width: 960px;}
     </style>
+
+    <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
 
 	<!-- Favicon -->
 	<!-- <link rel="shortcut icon" href="http://www.cudascubby.com/favicon.ico"> -->
 
-        <!-- ld27 javascripts files -->
+    <!-- ld27 javascripts files -->
 
     <!-- Include this file last! -->
 
     <!-- StarChaser javascripts library files -->
     <script type="text/javascript" src ="lib/phaser/phaser.js"></script>
+    <script type="text/javascript" src ="src/Key.js"></script>
+    <script type="text/javascript" src ="src/player.js"></script>
+    <script type="text/javascript" src ="src/InputHandler.js"></script>
+    <script type="text/javascript" src ="src/Level.js"></script>
+    <script type="text/javascript" src ="src/Lantern.js"></script>
+    <script type="text/javascript" src ="src/Gremlin.js"></script>
+    <script type="text/javascript" src ="src/LevelFactory.js"></script>
+
 </head>
 <body>
     
