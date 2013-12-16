@@ -8,7 +8,7 @@ var level;
 var inputHandler;
 var background;
 var gremlins = [];
-var currentLevel = 0;
+var currentLevel = 1;
 var glows;
 
 var jumpfx;
@@ -17,6 +17,9 @@ var drainfx;
 var restartfx;
 var gameoverfx;
 var pickupfx;
+
+var messageIndex = -1;
+var displayedMessage = 0;
 
 
 var text;
@@ -29,7 +32,17 @@ var gravity = 35;
 var game;
 
 window.onload = function(){
-	game = new Phaser.Game(WIDTH, HEIGHT, Phaser.CANVAS, 'game', {preload: preload, create: create, update: update, render: render});
+	game = new Phaser.Game(WIDTH, HEIGHT, Phaser.CANVAS, 'actual-game', {preload: preload, create: create, update: update, render: render});
+	splash = new Phaser.Game(WIDTH, HEIGHT, Phaser.CANVAS, 'splash', {preload: splashPreload, create: splashCreate, update: splashUpdate, render: splashRender});
+}
+
+function showGame(){
+	splash.destroy();
+	document.getElementById('splash').innerHTML = '';
+	document.getElementById('splash').setAttribute("style","height:0px");
+
+	//give player control
+	inputHandler = new InputHandler(game, player);
 }
 
 var states = {
@@ -37,7 +50,8 @@ var states = {
 	playing: 1,
 	intro: 2,
 	dead: 3,
-	ending: 4
+	ending: 4,
+	splash: 5
 }
 
 function preload(){
@@ -65,13 +79,14 @@ function preload(){
 	game.load.audio('gameover', 'res/sfx/gameover.wav');
 	game.load.audio('restart', 'res/sfx/restart.wav');
 	game.load.audio('pickup', 'res/sfx/pickup.wav');
+	game.load.audio('dark', 'res/sfx/dark.mp3');
 }
 
 function create(){
 	tileSetInit();
 	LevelFactory.init();
 
-	game.world.setBounds(-2500, -2500, 5000, 5000);
+	game.world.setBounds(-20000, -20000, 60000, 60000);
 	game.stage.backgroundColor = '#333333';
 	background = game.add.sprite(0, 0, 'background');
 	background.fixedToCamera = true;
@@ -84,9 +99,10 @@ function create(){
 	restartfx = game.add.audio('restart');
 	gameoverfx = game.add.audio('gameover');
 	pickupfx = game.add.audio('pickup');
+	game.add.audio('dark',1,true).play();
 
 
-	inputHandler = new InputHandler(game, player);
+	
 
 	repeatLevel();
 }
@@ -117,7 +133,9 @@ function update(){
 	}
 
 	for(var g = 0; g < gremlins.length; g++){
-		game.physics.collide(gremlins[g].sprite, level.layer, gremlins[g].handleEdge, null, gremlins[g]);
+		if(gremlins[g].sprite && level.layer){
+			game.physics.collide(gremlins[g].sprite, level.layer, gremlins[g].handleEdge, null, gremlins[g]);
+		}
 		game.physics.collide(key.sprite, gremlins[g].sprite, gameoverCollisionHandler, null, this);
 
 		for(var z = 0; z < lanterns.length; z++){
@@ -130,21 +148,27 @@ function update(){
 		gremlins[g].update();
 	}
 
+	if(messageIndex + 1 < messages[currentLevel].length && messageIndex < displayedMessage && inputHandler){
+		messageIndex++;
+		displayText(messages[currentLevel][messageIndex], game.camera.x + 250, game.camera.y + 150);
+	}
+
 	//text stuff
 	if(textShouldFadeIn && text.alpha <= 1){
-		text.alpha += 0.01;
+		text.alpha += 0.015;
 
 		if(text.alpha >= 1){
 			textShouldFadeIn = false;
 			text.alpha = 1;
-			timeTextDisplayed = game.time.now + 3600;
+			timeTextDisplayed = game.time.now + 900;
 		}
 	}else if(textShouldFadeOut){
-		text.alpha -= 0.01;
+		text.alpha -= 0.015;
 
 		if(text.alpha <= 0){
 			text.alpha = 0;
 			textShouldFadeOut = false;
+			displayedMessage++;
 		}
 	}
 
@@ -153,16 +177,13 @@ function update(){
 		timeTextDisplayed = -1;
 	}
 
-	//help the lantern do stuff
-	//player.lantern.lightBubble.x = player.lantern.sprite.x - 128*1.5;
-	//player.lantern.lightBubble.y = player.lantern.sprite.y - 128*1.5 + 16;
-
-	inputHandler.handleInput();
+	if(inputHandler){
+		inputHandler.handleInput();
+	}
 }
 
 function render(){
-	//game.debug.renderSpriteBody(key.sprite);
-	//game.debug.renderSpriteBody(lantern.sprite);
+
 }
 
 //prevent them from jumping over the light
@@ -211,9 +232,10 @@ function repeatLevel(){
 		key.sprite.kill();
 		
 		for(var i = 0; i < lanterns.length; i++){
-			lanterns[i].lightBubble.kill();
 			lanterns[i].sprite.kill();
 		}
+
+
 		
 	}
 
@@ -226,15 +248,22 @@ function repeatLevel(){
 	lanterns = [];
 	gremlins = [];
 	level = null;
+	glows.destroy();
+	glows = game.add.group();
+
+	displayedMessage = 0;
+	messageIndex = -1;
 
 	//currentLevel++;
 	getLevelDat(LevelFactory.createLevel(game, currentLevel));
-	inputHandler.handler = player;
+	if(inputHandler){
+		inputHandler.handler = player;
+	}
 	states.current = states.playing;
 	if(text){
 		text.destroy();
 	}
-	text = game.add.text(1800, 600, '', { font: '64px Iceland', align: 'center', fill: '#FFFFFF'});
+	text = game.add.text(1800, 600, '', { font: '36px Iceland', align: 'center', fill: '#FFFFFF'});
 	text.alpha = 0;
 }
 
@@ -242,5 +271,9 @@ function gameOver(){
 	gameoverfx.play();
 	states.current = states.gameOver;
 	displayText('sorry, bub! (press r to retry)', game.camera.x + 50, game.camera.y + 50);
+
+}
+
+function win(){
 
 }

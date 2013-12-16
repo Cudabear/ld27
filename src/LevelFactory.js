@@ -18,8 +18,15 @@ var LevelFactory = {
 	},
 
 	createLevel: function(game, number){
-		var level = new Level(game, this.maps[number], 3200, 640);
-		var dat = this.parseTiles(game, level, 3200, 640);
+		var width = 3200;
+		var height = 640;
+		if(number === 3){
+			width = 960;
+			height = 3200;
+		}
+
+		var level = new Level(game, this.maps[number], width, height);
+		var dat = this.parseTiles(game, level, width, height);
 		return dat;
 	},
 

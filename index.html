@@ -11,7 +11,9 @@
         #footer #powered_text {float: right; padding-right: 10px;}
         #footer #img {height: 35px; float: right;}
         #footer #img img { height: 35px;}
-        #game { margin-left: auto; margin-right: auto; width: 960px;}
+        #game { margin-left: auto; margin-right: auto; width: 960px; height: 720px; overflow-y: hidden;}
+        #splash {width: 960px; height: 720px; overflow-y: hidden;}
+        #actual-game { width: 960px; height: 720px;}
     </style>
 
     <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
@@ -33,17 +35,24 @@
     <script type="text/javascript" src ="src/Gremlin.js"></script>
     <script type="text/javascript" src ="src/LevelFactory.js"></script>
     <script type="text/javascript" src ="src/TileSet.js"></script>
+    <script type="text/javascript" src ="src/Splash.js"></script>
+    <script type="text/javascript" src ="src/Messages.js"></script>
 
 </head>
 <body>
     
     <div id="game">
+        <div id="splash">
 
+        </div>
+        <div id="actual-game">
+
+        </div>
     </div>
 
     <div id="footer"> 
         <div id="text">
-            <span>Created by Cudabear, 2013.  Do not Redistribute without Permission. </span>
+            <span>Created by Cudabear for Ludum Dare #28: You Only Get One.  Do not Redistribute without Permission. </span>
         </div>
         
         <div id="img">  

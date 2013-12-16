@@ -14,7 +14,7 @@ Player = function(gameInstance, key, x, y){
 
 
 
-	this.speed = 200;
+	this.speed = 250;
 	this.isCarrying = false;
 	this.carriedItem = null;
 
@@ -92,7 +92,10 @@ Player = function(gameInstance, key, x, y){
 					if(tileType ===14 || tileType === 13 || tileType === 18 || tileType === 19 || tileType === 15|| tileType === 20){
 						if(this.carriedItem === this.key){	
 							currentLevel++;
-							repeatLevel();
+							if(currentLevel > 3){
+								currentLevel = 1;
+							}
+								repeatLevel();
 						}
 					}
 				case 'none':

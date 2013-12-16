@@ -4,7 +4,6 @@ tileSetInit = function(){
 	tileset = game.add.tileset('tiles');
 
 	tileset.setCollisionRange(0, this.tileset.total -1, true, true, true, true)
-	tileset.setCollision (1, false, false, false, false);
 	tileset.setCollision (5, false, false, false, false);
 	tileset.setCollision (6, false, false, false, false);
 	tileset.setCollision (7, false, false, false, false);
